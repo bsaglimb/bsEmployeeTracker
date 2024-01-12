@@ -79,7 +79,7 @@ const newEmployee = async () =>{
 // add a role
 
 const newRole = async () =>{
-const jobRoles = await inputChoices.deptChoices(); //correct this line accordingly to get the correct data from the database
+const jobRoles = await inputChoices.deptChoices(); // this is the array of departments that will be used as choices in the inquirer prompt
 
     const role = await inquirer.prompt ([
 
@@ -185,7 +185,7 @@ const updateEmployeesManager = async () =>{
             name: 'employee_id',
             message: 'Which employee would you like to update?',
             choices: employeeChoices,
-            loop: false;
+            loop: false,
         },
         {
             type: 'list',
