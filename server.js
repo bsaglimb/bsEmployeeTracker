@@ -1,6 +1,14 @@
 const inquirer = require("inquirer");
-
+const consoleTable = require("console.table"); // this is the package that will allow us to print the table in the console
+const inputChoices = require('./lib/inputChoices'); // this is the file that contains the choices for the inquirer prompts
 const sql = require('./db/query_lib');
+
+
+
+//roleArr = roleChoices
+
+//mgmtArr = mgmtChoices
+
 
 // add a department
 const newDepartment = async () =>{
@@ -28,7 +36,9 @@ const newDepartment = async () =>{
 // add an employee
 const newEmployee = async () =>{
     
-    
+    const roleChoices = await inputChoices.roleChoices();
+    const mgmtChoices = await inputChoices.mgmtChoices();
+
     const employee = await inquirer.prompt ([
 
         {
@@ -69,7 +79,7 @@ const newEmployee = async () =>{
 // add a role
 
 const newRole = async () =>{
-const jobRoles = await sql.getDepartments(); //correct this line accordingly to get the correct data from the database
+const jobRoles = await inputChoices.deptChoices(); //correct this line accordingly to get the correct data from the database
 
     const role = await inquirer.prompt ([
 
@@ -118,3 +128,98 @@ const jobRoles = await sql.getDepartments(); //correct this line accordingly to 
 // BONUS objectives
 
 // Delete an employee
+
+const deleteEmployee = async () =>{
+    const employeeChoices = await inputChoices.NonMgmtChoices();
+
+    const employee = await inquirer.prompt ([
+
+        {
+            type: 'list',
+            name: 'employee_id',
+            message: 'Which employee would you like to delete?',
+            choices: employeeChoices,
+            loop: false,
+        }
+    ]);
+    await sql.deleteEmployee(employee);
+
+    chooseRequest();
+}
+
+// Update an employee's role
+
+const updateRole = async () =>{
+    const roleChoices = await inputChoices.roleChoices();
+    const employeeChoices = await inputChoices.employeeChoices();
+    const employee = await inquirer.prompt ([
+        {
+            type: 'list',
+            name: 'employee_id',
+            message: 'Which employee would you like to update?',
+            choices: employeeChoices,
+            loop: false,
+        },
+        {
+            type: 'list',
+            name: 'role_id',
+            message: 'What is the employees new role?',
+            choices: roleChoices,
+            loop: false,
+        }
+    ]);
+
+    await sql.updateEmployeeRoleById(employee);
+
+    chooseRequest();
+}
+
+// Update an employee's manager
+
+const updateEmployeesManager = async () =>{
+    const employeeChoices = await inputChoices.NonMgmtChoices();
+    const mgmtChoices = await inputChoices.mgmtChoices();
+    const employee = await inquirer.prompt ([
+        {
+            type: 'list',
+            name: 'employee_id',
+            message: 'Which employee would you like to update?',
+            choices: employeeChoices,
+            loop: false;
+        },
+        {
+            type: 'list',
+            name: 'manager_id',
+            message: 'Who is the employees new manager?',
+            choices: mgmtChoices,
+            loop: false,
+        }
+    ]);
+
+    await sql.updateEmployeesManagerById(employee);
+
+    chooseRequest();
+}
+
+//view all departments
+
+const viewAllDeptartments = () => {
+    sql.getDepts()
+  
+    .then(([rows]) => {
+      console.log('\n');
+      console.log(inputChoices.getTable(rows));
+    })
+  
+    .then(()=> {
+        chooseRequest();
+    }) 
+  }
+
+// View all roles
+
+const viewAllRoles = () => {
+    sql.getRoles()
+
+    .then(([rows]) => )
+}
