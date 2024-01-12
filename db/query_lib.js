@@ -103,7 +103,7 @@ class DbQuery {
     getNonManagers(){
         return this.db
         .promise()
-        .query('SELECT id, CONCAT(first_name, " ", last_name) AS employee name FROM employee WHERE manager_id IS NOT NULL');
+        .query('SELECT id, CONCAT(first_name, " ", last_name) AS employee_name FROM employee WHERE manager_id IS NOT NULL');
     }
 
 
