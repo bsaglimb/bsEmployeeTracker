@@ -221,5 +221,159 @@ const viewAllDeptartments = () => {
 const viewAllRoles = () => {
     sql.getRoles()
 
-    .then(([rows]) => )
+    .then(([rows]) =>{
+        console.log('\n');
+        console.log(inputChoices.getTable(rows));
+    })
+    .then(()=>{
+        chooseRequest();
+    })
 }
+
+// View all employees
+
+const viewAllEmployees = () => {
+    sql.getEmployees()
+
+    .then(([rows]) => {
+        console.log('\n');
+        console.log(inputChoices.getTable(rows));
+    })
+
+    .then(()=>{
+        chooseRequest();
+    })
+}
+
+//View all departments and their budget
+
+const viewBudgets = async () => {
+    sql.getBudgetByDept()
+
+    .then(([rows]) => {
+        console.log('\n');
+        console.log(inputChoices.getTable(rows));
+    })
+ .then(()=>{
+     chooseRequest();
+ })
+}
+
+// View all employees in a specific department
+const viewEmployeeByDepartment = async () => {
+    const deptChoices = await inputChoices.deptChoices();
+
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'department_id',
+            message: 'Which department would you like to view employees for?',
+            choices: deptChoices,
+            loop: false,
+        }
+    ])
+
+.then((data) => {
+    sql.getEmployeeByDeptId(data)
+      .then(([rows]) =>{
+        console.log('\n');
+        console.log(cTable.getTable(rows))
+        chooseRequest();
+      })
+  }) 
+}
+
+// View all employees managed by a specific manager
+
+const viewEmployeeByMgr = async () => {
+    const mgmtChoices = await inputChoices.mgmtChoices();
+inquirer.prompt([
+    {
+        type: 'list',
+        name: 'manager_id',
+        message: 'Which manager would you like to view employees for?',
+        choices: mgmtChoices,
+        loop: false,
+    }
+])
+
+.then((data) => {
+    sql.getEmployeeByMgrId(data)
+      .then(([rows]) =>{
+        console.log('\n');
+        console.log(inputChoices.getTable(rows))
+        chooseRequest();
+      })
+  }) 
+
+}
+
+const chooseRequest = async () => {
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'request',
+            message: 'What would you like to do?',
+            choices: [
+                'Add a department',
+                'Add an employee',
+                'Add a role',
+                'Delete an employee',
+                'Update an employee role',
+                'Update an employee manager',
+                'View all departments',
+                'View all roles',
+                'View departments budgets',
+                'View employees by department',
+                'View employees by manager',
+            ],
+            loop: false,
+        },
+    ])
+
+    .then((data) => {
+        const {request} = data;
+        console.log(request);
+    // switch statement to determine which function to run based on the user's choice
+    switch (request) {
+        case 'Add a department':
+            newDepartment();
+            break;
+        case 'Add an employee':
+            newEmployee();
+            break; 
+        case 'Delete an employee':
+            deleteEmployee();
+            break;
+        case 'Update an employee role':
+            updateRole();
+            break;
+        case 'Update an employee manager':
+            updateEmployeesManager();
+            break;
+        case 'View all departments':
+            viewAllDeptartments();
+            break;
+        case 'View all employees':
+            viewAllEmployees();
+            break;
+        case 'View all roles':
+            viewAllRoles();
+            break;
+        case 'View departments budgets':
+            viewBudgets();
+            break;
+        case 'View employees by department':
+            viewEmployeeByDepartment();
+            break;
+        case 'View employees by manager':
+            viewEmployeeByMgr();
+            break;
+
+        default:
+            break;
+    }
+ })
+}
+
+chooseRequest();
