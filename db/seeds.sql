@@ -1,9 +1,11 @@
+USE company_db;
+
 INSERT INTO department (department_name)
 VALUES
        ("Database Administrator"),
        ("Backend developer"),
        ("Frontend developer"),
-       ("FullStack developer"),
+       ("FullStack developer");
 
 INSERT INTO role (title, salary, department_id)
 VALUES ("Database Manager", 90000, 1),
@@ -32,3 +34,5 @@ VALUES ("Sally", "Smith", 1, NULL),
        ("Tori", "Thomson", 10, NULL),
        ("Jeryy", "Peterson", 11, 10),
        ("Larry", "David", 12, 10);
+
+ COMMIT;

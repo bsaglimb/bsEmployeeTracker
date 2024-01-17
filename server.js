@@ -4,12 +4,6 @@ const inputChoices = require('./lib/inputChoices'); // this is the file that con
 const sql = require('./db/query_lib');
 
 
-
-//roleArr = roleChoices
-
-//mgmtArr = mgmtChoices
-
-
 // add a department
 const newDepartment = async () =>{
     const department = await inquirer.prompt ([
