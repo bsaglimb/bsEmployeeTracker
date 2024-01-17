@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
     {
     dialect: 'mysql', 
     host: 'localhost',
-    port: '8889',
+    port: 8889,
   });
 
 module.exports = sequelize;
