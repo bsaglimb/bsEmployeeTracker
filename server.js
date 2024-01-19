@@ -1,7 +1,7 @@
 const inquirer = require("inquirer");
 const consoleTable = require("console.table"); // this is the package that will allow us to print the table in the console
 const inputChoices = require('./lib/inputChoices'); // this is the file that contains the choices for the inquirer prompts
-const sql = require('./db/query_lib');
+const sql = require('./db/query_lib'); // this is the file that contains the database queries
 
 
 // add a department
@@ -10,7 +10,7 @@ const newDepartment = async () =>{
 
         {
             type: 'input',
-            name: 'name',
+            name: 'department_name',
             message: 'What is the name of the department?',
             validate: (name) =>{
                 if (name){
@@ -28,9 +28,11 @@ const newDepartment = async () =>{
 };
 
 // add an employee
+
 const newEmployee = async () =>{
     
     const roleChoices = await inputChoices.roleChoices();
+let predefinedRoleChoices = ['Database Manager', 'Database Lead', 'Database Representative', 'Backend Manager', 'Backend Lead', 'Backend Representative', 'Frontend Manager', 'Frontend Lead', 'Frontend Representative', 'Full Stack Manager', 'Full Stack Lead', 'Full Stack Representative' ];
     const mgmtChoices = await inputChoices.mgmtChoices();
 
     const employee = await inquirer.prompt ([
@@ -53,14 +55,23 @@ const newEmployee = async () =>{
         type: 'list',
         name: 'role_id',
         message: 'What is the employees role?',
-        choices: employeeRoles,
-        loop: false,
+        choices: [...predefinedRoleChoices, ...roleChoices],
+        validate: (role_id) => {
+            if (roleChoices.includes(role_id) || predefinedRoleChoices.includes(role_id)) {
+                return true;
+            } else {
+                console.log('Please select a valid role!');
+                return false;
+            }
+        },
+    
+
     },
     {
         type: 'list',
         name: 'manager_id',
         message: 'Who is the employees manager?',
-        choices: mgmt,
+        choices: mgmtChoices,
         loop: false,
     }
 ]);
@@ -198,11 +209,11 @@ const updateEmployeesManager = async () =>{
 //view all departments
 
 const viewAllDeptartments = () => {
-    sql.getDepts()
+    sql.getDepartments()
   
     .then(([rows]) => {
       console.log('\n');
-      console.log(inputChoices.getTable(rows));
+      console.log(console.table(rows));
     })
   
     .then(()=> {
@@ -217,7 +228,7 @@ const viewAllRoles = () => {
 
     .then(([rows]) =>{
         console.log('\n');
-        console.log(inputChoices.getTable(rows));
+        console.log(console.table(rows));
     })
     .then(()=>{
         chooseRequest();
@@ -231,7 +242,7 @@ const viewAllEmployees = () => {
 
     .then(([rows]) => {
         console.log('\n');
-        console.log(inputChoices.getTable(rows));
+        console.log(console.table(rows));
     })
 
     .then(()=>{
@@ -246,7 +257,7 @@ const viewBudgets = async () => {
 
     .then(([rows]) => {
         console.log('\n');
-        console.log(inputChoices.getTable(rows));
+        console.log(console.table(rows));
     })
  .then(()=>{
      chooseRequest();
@@ -271,7 +282,7 @@ const viewEmployeeByDepartment = async () => {
     sql.getEmployeeByDeptId(data)
       .then(([rows]) =>{
         console.log('\n');
-        console.log(cTable.getTable(rows))
+        console.log(consoleTable.table(rows))
         chooseRequest();
       })
   }) 
@@ -295,7 +306,7 @@ inquirer.prompt([
     sql.getEmployeeByMgrId(data)
       .then(([rows]) =>{
         console.log('\n');
-        console.log(inputChoices.getTable(rows))
+        console.log(console.table(rows))
         chooseRequest();
       })
   }) 
