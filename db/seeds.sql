@@ -35,4 +35,3 @@ VALUES ("Sally", "Smith", 1, NULL),
        ("Jeryy", "Peterson", 11, 10),
        ("Larry", "David", 12, 10);
 
---  COMMIT;

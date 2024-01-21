@@ -31,8 +31,18 @@ const newDepartment = async () =>{
 
 const newEmployee = async () =>{
     
-    const roleChoices = await inputChoices.roleChoices();
-let predefinedRoleChoices = ['Database Manager', 'Database Lead', 'Database Representative', 'Backend Manager', 'Backend Lead', 'Backend Representative', 'Frontend Manager', 'Frontend Lead', 'Frontend Representative', 'Full Stack Manager', 'Full Stack Lead', 'Full Stack Representative' ];
+    const roleChoices = (await inputChoices.roleChoices()).map(choice => ({ name: choice.name, value: choice.value }));
+
+let predefinedRoleChoices = [ 
+    {
+        name: 'Manager',
+        value: 1,
+    },
+    {
+        name: 'Employee',
+        value: 2,
+    },
+ ];
     const mgmtChoices = await inputChoices.mgmtChoices();
 
     const employee = await inquirer.prompt ([
@@ -56,16 +66,15 @@ let predefinedRoleChoices = ['Database Manager', 'Database Lead', 'Database Repr
         name: 'role_id',
         message: 'What is the employees role?',
         choices: [...predefinedRoleChoices, ...roleChoices],
-        validate: (role_id) => {
-            if (roleChoices.includes(role_id) || predefinedRoleChoices.includes(role_id)) {
+        validate: (role_id, answers) => {
+            const validRoles = [...predefinedRoleChoices.map(choice => choice.value), ...roleChoices.map(choice => choice.value)];
+            if (validRoles.includes(role_id)){
                 return true;
             } else {
                 console.log('Please select a valid role!');
                 return false;
             }
         },
-    
-
     },
     {
         type: 'list',
@@ -135,7 +144,7 @@ const jobRoles = await inputChoices.deptChoices(); // this is the array of depar
 // Delete an employee
 
 const deleteEmployee = async () =>{
-    const employeeChoices = await inputChoices.NonMgmtChoices();
+    const employeeChoices = await inputChoices.nonMgmtChoices();
 
     const employee = await inquirer.prompt ([
 
@@ -182,7 +191,7 @@ const updateRole = async () =>{
 // Update an employee's manager
 
 const updateEmployeesManager = async () =>{
-    const employeeChoices = await inputChoices.NonMgmtChoices();
+    const employeeChoices = await inputChoices.nonMgmtChoices();
     const mgmtChoices = await inputChoices.mgmtChoices();
     const employee = await inquirer.prompt ([
         {
