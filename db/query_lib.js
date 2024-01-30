@@ -46,6 +46,10 @@ class DbQuery {
         return this.db.promise().query('SELECT * FROM department WHERE id = ?', [departmentId]);
     }
 
+    async getAllEmployees() {
+        return this.db.promise().query('SELECT * FROM employee');
+    }
+
     async getEmployeeByDepartmentId(data) {
         const values = [data.department_id];
         return this.db.promise().query('SELECT e.first_name AS "first name", e.last_name AS "last name", d.department_name AS department FROM employee e INNER JOIN role r ON e.role_id = r.id INNER JOIN department d ON r.department_id = d.id WHERE d.id = ?', values);

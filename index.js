@@ -96,6 +96,7 @@ const newEmployee = async () => {
 const newRole = async () => {
     const jobRoles = await inputChoices.deptChoices(); // this is the array of departments that will be used as choices in the inquirer prompt
 
+
     const role = await inquirer.prompt([
         {
             type: 'input',
@@ -118,7 +119,6 @@ const newRole = async () => {
         },
     ]);
     
-
     await sql.addRole(role);
 
     chooseRequest();
@@ -227,14 +227,9 @@ const viewAllRoles = () => {
 // View all employees
 
 const viewAllEmployees = () => {
-    sql.getEmployees()
-
-        .then(([rows]) => {
+    sql.getAllEmployees().then(([rows]) => {
             console.log('\n');
-            console.log(console.table(rows));
-        })
-
-        .then(() => {
+            console.table((rows));
             chooseRequest();
         })
 }
@@ -317,6 +312,7 @@ const chooseRequest = async () => {
                 'Update an employee manager',
                 'View all departments',
                 'View all roles',
+                'View all employees',
                 'View departments budgets',
                 'View employees by department',
                 'View employees by manager',
