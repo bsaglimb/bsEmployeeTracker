@@ -34,7 +34,7 @@ class DbQuery {
     }
 
     async updateEmployeeManagerById(data) {
-        const values = [data.manager_id, data.employee_id];
+        const values = [data.manager_name, data.employee_name];
         return this.db.promise().query('UPDATE employee SET manager_id = ? WHERE id = ?', values);
     }
 
@@ -60,7 +60,7 @@ class DbQuery {
         return this.db.promise().query('SELECT e.first_name AS "first name", e.last_name AS "last name", CONCAT(mgmt.first_name, " ", mgmt.last_name) AS Manager FROM employee e INNER JOIN employee mgmt ON e.manager_id = mgmt.id WHERE e.manager_id = ?', values);
     }
 
-    async getBudgetByDepartment(data) {
+    async getBudgetByDept(data) {
         return this.db.promise().query('SELECT d.department_name AS department, SUM(r.salary) AS budget FROM role r INNER JOIN department d ON r.department_id = d.id GROUP BY department');
     }
 

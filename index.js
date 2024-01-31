@@ -96,7 +96,6 @@ const newEmployee = async () => {
 const newRole = async () => {
     const jobRoles = await inputChoices.deptChoices(); // this is the array of departments that will be used as choices in the inquirer prompt
 
-
     const role = await inquirer.prompt([
         {
             type: 'input',
@@ -111,11 +110,10 @@ const newRole = async () => {
             validate: (salary) => (salary && !isNaN(salary) ? true : 'Please enter a valid salary!'),
         },
         {
-            type: 'list',
+            type: 'input',
             name: 'department_id',
             message: 'What department is this job role in?',
-            choices: jobRoles
-            // jobRoles.map((department) => ({ name: department.department.name, value: department.id })),
+            choices:jobRoles.map((jobRole) => ({ name: jobRole.department.department_name, value: jobRole.department.id })),
         },
     ]);
     
@@ -124,28 +122,6 @@ const newRole = async () => {
     chooseRequest();
 }
 
-
-// BONUS objectives
-
-// Delete an employee
-
-const deleteEmployee = async () => {
-    const employeeChoices = await inputChoices.nonMgmtChoices();
-
-    const employee = await inquirer.prompt([
-
-        {
-            type: 'list',
-            name: 'employee_id',
-            message: 'Which employee would you like to delete?',
-            choices: employeeChoices,
-            loop: false,
-        }
-    ]);
-    await sql.deleteEmployee(employee);
-
-    chooseRequest();
-}
 
 // Update an employee's role
 
@@ -174,6 +150,29 @@ const updateRole = async () => {
     chooseRequest();
 }
 
+
+// BONUS objectives
+
+// Delete an employee
+
+const deleteEmployee = async () => {
+    const employeeChoices = await inputChoices.nonMgmtChoices();
+
+    const employee = await inquirer.prompt([
+
+        {
+            type: 'list',
+            name: 'employee_id',
+            message: 'Which employee would you like to delete?',
+            choices: employeeChoices,
+            loop: false,
+        }
+    ]);
+    await sql.deleteEmployee(employee);
+
+    chooseRequest();
+}
+
 // Update an employee's manager
 
 const updateEmployeesManager = async () => {
@@ -185,18 +184,16 @@ const updateEmployeesManager = async () => {
             name: 'employee_id',
             message: 'Which employee would you like to update?',
             choices: employeeChoices,
-            loop: false,
         },
         {
             type: 'list',
             name: 'manager_id',
             message: 'Who is the employees new manager?',
-            choices: mgmtChoices,
-            loop: false,
+            choices: mgmtChoices, 
         }
     ]);
 
-    await sql.updateEmployeesManagerById(employee);
+    await sql.updateEmployeeManagerById(employee);
 
     chooseRequest();
 }
@@ -237,11 +234,9 @@ const viewAllEmployees = () => {
 //View all departments and their budget
 
 const viewBudgets = async () => {
-    sql.getBudgetByDept()
-
-        .then(([rows]) => {
+    sql.getBudgetByDept().then(([rows]) => {
             console.log('\n');
-            console.log(console.table(rows));
+            console.table(rows);
         })
         .then(() => {
             chooseRequest();
@@ -254,19 +249,18 @@ const viewEmployeeByDepartment = async () => {
 
     inquirer.prompt([
         {
-            type: 'list',
+            type: 'input',
             name: 'department_id',
             message: 'Which department would you like to view employees for?',
             choices: deptChoices,
-            loop: false,
         }
     ])
 
         .then((data) => {
-            sql.getEmployeeByDeptId(data)
+            sql.getEmployeeByDepartmentId(data)
                 .then(([rows]) => {
                     console.log('\n');
-                    console.log(consoleTable.table(rows))
+                    console.table(rows)
                     chooseRequest();
                 })
         })
@@ -287,10 +281,9 @@ const viewEmployeeByMgr = async () => {
     ])
 
         .then((data) => {
-            sql.getEmployeeByMgrId(data)
-                .then(([rows]) => {
+            sql.getEmployeeByMgrId(data).then(([rows]) => {
                     console.log('\n');
-                    console.log(console.table(rows))
+                    console.table(rows)
                     chooseRequest();
                 })
         })
@@ -304,15 +297,15 @@ const chooseRequest = async () => {
             name: 'request',
             message: 'What would you like to do?',
             choices: [
-                'Add a department',
-                'Add an employee',
-                'Add a role',
-                'Delete an employee',
-                'Update an employee role',
-                'Update an employee manager',
                 'View all departments',
                 'View all roles',
                 'View all employees',
+                'Add a department',
+                'Add a role',
+                'Add an employee',
+                'Update an employee role',
+                'Delete an employee',
+                'Update an employee manager',
                 'View departments budgets',
                 'View employees by department',
                 'View employees by manager',
