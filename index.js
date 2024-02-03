@@ -187,7 +187,7 @@ const updateEmployeesManager = async () => {
         },
         {
             type: 'list',
-            name: 'manager_id',
+            name: 'manager_name',
             message: 'Who is the employees new manager?',
             choices: mgmtChoices, 
         }
