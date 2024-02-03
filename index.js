@@ -309,6 +309,7 @@ const chooseRequest = async () => {
                 'View departments budgets',
                 'View employees by department',
                 'View employees by manager',
+                'Exit'
             ]
         },
     ])
@@ -354,6 +355,8 @@ const chooseRequest = async () => {
                 case 'View employees by manager':
                     viewEmployeeByMgr();
                     break;
+                case 'Exit':
+                   process.exit();
 
                 default:
                     break;

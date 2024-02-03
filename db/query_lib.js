@@ -87,6 +87,10 @@ class DbQuery {
     async mgmtChoices() {
         return this.db.promise().query('SELECT id, CONCAT(first_name, " ", last_name) AS manager_name FROM employee WHERE manager_id IS NULL');
     }
+
+    async exit() {
+        return this.db.end();
+    }
 }
 
 // Export the class
