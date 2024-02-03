@@ -23,3 +23,11 @@
 * THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
 * WHEN I choose to update an employee role
 * THEN I am prompted to select an employee to update and their new role and this information is updated in the database
+
+## Demonstration
+
+* https://drive.google.com/file/d/1aZXpJxJiyxe50S8HcphjI9EfnvmBeo6m/view
+
+## Pages
+* https://github.com/bsaglimb/bsEmployeeTracker
+* https://bsaglimb.github.io/bsEmployeeTracker/
